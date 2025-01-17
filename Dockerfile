@@ -1,6 +1,9 @@
 ARG IMAGE_PLATFORM=linux/amd64
 FROM --platform=$IMAGE_PLATFORM php:8.4-fpm
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer --version && php -v
+
 RUN apt-get update;
 
 RUN apt-get -y --no-install-recommends install \

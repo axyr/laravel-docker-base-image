@@ -1,4 +1,4 @@
-name: CI
+me: CI
 
 on:
   push:
@@ -8,10 +8,22 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.API_TOKEN_GITHUB }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build the Docker image
-        run: docker build . --tag ghcr.io/${{ github.repository_owner }}/laravel-docker-base-image:latest --platform linux/amd64,linux/arm64 
-      - name: Push the Docker image
-        run: docker push ghcr.io/${{ github.repository_owner }}/laravel-docker-base-image --all-tags
+
+      - name: Build and push multi-platform Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/laravel-docker-base-image:latest
+            ghcr.io/${{ github.repository_owner }}/laravel-docker-base-image:${{ github.run_number }}
+

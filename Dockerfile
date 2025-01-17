@@ -33,6 +33,3 @@ RUN docker-php-ext-configure gd --with-jpeg && \
     docker-php-ext-install pcntl && \
     pecl install redis && \
     docker-php-ext-enable redis;
-
-RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-

@@ -1,4 +1,5 @@
-FROM php:8.4-fpm
+ARG IMAGE_PLATFORM=linux/amd64
+FROM --platform=$IMAGE_PLATFORM php:8.4-fpm
 
 RUN apt-get update;
 

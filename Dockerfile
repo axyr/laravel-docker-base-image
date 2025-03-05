@@ -4,35 +4,27 @@ FROM --platform=$IMAGE_PLATFORM php:8.4-fpm
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer --version && php -v
 
-RUN apt-get update;
-
-RUN apt-get -y --no-install-recommends install \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         libpng-dev \
         libjpeg-dev \
         zlib1g-dev \
         libzip-dev \
         unzip \
         cron \
-        supervisor;
+        supervisor \
+        libpq-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-RUN apt-get -y --no-install-recommends install \
-        php8.4-zip \
-        php8.4-gd \
-        php8.4-mysql \
-        php8.4-exif \
-        php8.4-sqlite3 ; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+RUN docker-php-ext-configure gd --with-jpeg \
+    && docker-php-ext-install gd zip exif opcache \
+    && docker-php-ext-enable exif opcache \
+    && docker-php-ext-install mysqli pdo pdo_mysql \
+    && docker-php-ext-enable pdo_mysql \
+    && docker-php-ext-install pcntl \
+    && docker-php-ext-enable pcntl \
+    && docker-php-ext-install pgsql pdo_pgsql \
+    && docker-php-ext-enable pgsql pdo_pgsql
 
-RUN docker-php-ext-configure gd --with-jpeg && \
-    docker-php-ext-configure pcntl --enable-pcntl && \
-    docker-php-ext-install gd && \
-    docker-php-ext-install zip && \
-    docker-php-ext-install exif && \
-    docker-php-ext-install opcache && \
-    docker-php-ext-enable exif && \
-    docker-php-ext-install mysqli pdo pdo_mysql && \
-    docker-php-ext-enable pdo_mysql && \
-    docker-php-ext-install pcntl && \
-    pecl install redis && \
-    docker-php-ext-enable redis;
+RUN pecl install redis \
+    && docker-php-ext-enable redis

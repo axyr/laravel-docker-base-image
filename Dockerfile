@@ -11,6 +11,7 @@ RUN apk add --no-cache \
         unzip \
         libpq-dev \
         curl \
+        libexif \
         ca-certificates
 
 RUN docker-php-ext-configure gd --with-jpeg \

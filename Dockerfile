@@ -1,4 +1,5 @@
 ARG IMAGE_PLATFORM=linux/amd64
+
 FROM --platform=$IMAGE_PLATFORM php:8.4-fpm-alpine AS builder
 
 RUN apk add --no-cache \
@@ -15,14 +16,8 @@ RUN apk add --no-cache \
         ca-certificates
 
 RUN docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install gd zip exif opcache \
-    && docker-php-ext-enable exif opcache \
-    && docker-php-ext-install mysqli pdo pdo_mysql \
-    && docker-php-ext-enable pdo_mysql \
-    && docker-php-ext-install pcntl \
-    && docker-php-ext-enable pcntl \
-    && docker-php-ext-install pgsql pdo_pgsql \
-    && docker-php-ext-enable pgsql pdo_pgsql \
+    && docker-php-ext-install gd zip exif opcache mysqli pdo pdo_mysql pcntl pgsql pdo_pgsql \
+    && docker-php-ext-enable exif opcache pdo_mysql pcntl pgsql pdo_pgsql \
     && pecl install redis \
     && docker-php-ext-enable redis
 

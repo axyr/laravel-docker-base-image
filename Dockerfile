@@ -44,4 +44,5 @@ RUN apk add --no-cache \
         ca-certificates \
         nodejs \
         npm \
+        libexif \
     && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*

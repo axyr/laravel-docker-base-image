@@ -15,10 +15,7 @@ RUN apk add --no-cache \
         libpq-dev \
         curl \
         libexif-dev \
-        nodejs \
-        npm \
         libexif \
-        ca-certificates \
         && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 RUN docker-php-ext-configure gd --with-jpeg \

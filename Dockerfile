@@ -19,6 +19,7 @@ RUN apk add --no-cache \
         nodejs \
         npm \
         git \
+        openssh \
         && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 RUN docker-php-ext-configure gd --with-jpeg \
